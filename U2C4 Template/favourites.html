@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Favourites</title>
+    <link rel="stylesheet" href="commonStyles.css" />
+    <link rel="stylesheet" href="type.css">
+  </head>
+
+  <body>
+    <div id="links">
+      <div><a href="index.html">Home</a></div>
+      <div><a href="contact.html">Contact List</a></div>
+      <div><a href="favourites.html">Favourites</a></div>
+    </div>
+
+    <select>
+              <option value="">Select Type</option>
+              <option value="Family">Family</option>
+              <option value="Friends">Friends</option>
+              <option value="Others">Others</option>  
+    </select>
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th>Contact Name</th>
+            <th>Mobile Number</th>
+            <th>Type</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody id="page">
+          <!-- Append your output to tbody -->
+        </tbody>
+      </table>
+    </main>
+  </body>
+  <script>
+    //code your js part here
+    //append your output to tbody
+  
+    var favosData = JSON.parse(localStorage.getItem("favourites"))
+
+    display(favosData);
+    
+function display(collectedData){
+
+  page.innerHTML=null;
+
+  collectedData.forEach(function(el,i){
+
+    var tr = document.createElement("tr")
+
+    var td1 = document.createElement("td")
+    td1.innerText=el.name
+
+    var td2 = document.createElement("td")
+    td2.innerText=el.mobile
+
+    var td3 = document.createElement("td")
+    td3.innerText=el.type;
+
+    
+    var td4 = document.createElement("td")
+                td4.innerText= "Delete"
+                td4.style.color="red"
+                td4.style.cursor="pointer"
+
+                td4.addEventListener("click",function(){
+                  Delete(el,i)
+                })
+
+   
+
+     tr.append(td1,td2,td3,td4)
+     
+    page.append(tr);
+  })
+}
+
+  var filter = document.querySelector("select")
+
+  filter.addEventListener("change",function(){
+
+    if(filter.value == "")
+    {
+      display(favosData);
+
+    }
+
+    else{
+      var filtered = favosData.filter(function(el){
+          
+         return el.type == filter.value;
+            
+      })
+
+      display(filtered)
+    }
+
+
+
+  })
+
+  function Delete(el,i){
+
+    favosData.splice(el,1);
+    localStorage.setItem("favourites",JSON.stringify(favosData))
+window.location.reload();
+
+}
+
+
+  </script>
+</html>
